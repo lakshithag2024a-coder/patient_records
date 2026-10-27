@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Push to DockerHub') {
             steps {
-                bat 'echo %DOCKERHUB_CREDS_PSW% | docker login -u %DOCKERHUB_CREDS_USR% --password-stdin'
+                bat 'docker login -u %DOCKERHUB_CREDS_USR% -p %DOCKERHUB_CREDS_PSW%'
                 bat 'docker push %IMAGE_NAME%:%TAG%'
             }
         }
