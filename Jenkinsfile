@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    environment{
+    environment {
         DOCKERHUB_CREDS = credentials('dockerhub-creds')
         IMAGE_NAME = "lakshitha119/patient-records"
         TAG = "v1" 
@@ -8,19 +8,19 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$TAG .'
+                bat 'docker build -t %IMAGE_NAME%:%TAG% .'
             }
         }
         stage('Push to DockerHub') {
             steps {
-                sh 'echo $DOCKERHUB_CREDS_PSW | docker login -u $DOCKERHUB_CREDS_USR --password-stdin'
-                sh 'docker push $IMAGE_NAME:$TAG'
+                bat 'echo %DOCKERHUB_CREDS_PSW% | docker login -u %DOCKERHUB_CREDS_USR% --password-stdin'
+                bat 'docker push %IMAGE_NAME%:%TAG%'
             }
         }
     }
     post {
         always {
-            sh 'docker logout'
+            bat 'docker logout'
         }
     }
 }
