@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDS = credentials('dockerhub-creds')
         IMAGE_NAME = "lakshitha119/patient-records"
-        TAG = "v2" 
+        TAG = "v3" 
     }
     stages {
         stage('Build Docker Image') {
