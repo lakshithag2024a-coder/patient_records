@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: patient-app
-        image: yourdockerhubusername/patient-records:v1
+        image: lakshitha119/patient-records:v1
         ports:
         - containerPort: 5000
 ---
