@@ -1,31 +1,39 @@
 from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
-patients = []
+
+# Mock data to test the search functionality
+patients = [
+    {"name": "Alice Smith", "history": "Allergic to penicillin"},
+    {"name": "Bob Jones", "history": "Type 2 Diabetes"},
+    {"name": "Charlie Brown", "history": "Asthma"}
+]
 
 @app.route('/', methods=['GET', 'POST'])
-def add_patient():
+def search_patient():
+    results = []
     if request.method == 'POST':
-        name = request.form.get('name')
-        history = request.form.get('history')
-        patients.append({"name": name, "history": history})
-        return f"Patient {name} added. <a href='/'>Go back</a>"
+        search_query = request.form.get('name').lower()
+        results = [p for p in patients if search_query in p['name'].lower()]
     
     html = '''
-        <h2>Patient Records - v1 (Add)</h2>
+        <h2>Patient Records - v2 (Search)</h2>
         <form method="POST">
-            Name: <input type="text" name="name" required><br><br>
-            Medical History: <textarea name="history" required></textarea><br><br>
-            <input type="submit" value="Store Patient History">
+            Search by Name: <input type="text" name="name" required>
+            <input type="submit" value="Search">
         </form>
-        <h3>Stored Records (Memory):</h3>
+        <h3>Search Results:</h3>
         <ul>
-        {% for p in patients %}
+        {% for p in results %}
             <li><strong>{{ p.name }}</strong>: {{ p.history }}</li>
+        {% else %}
+            {% if request.method == 'POST' %}
+                <li>No records found.</li>
+            {% endif %}
         {% endfor %}
         </ul>
     '''
-    return render_template_string(html, patients=patients)
+    return render_template_string(html, results=results)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
